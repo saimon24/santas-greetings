@@ -1,9 +1,11 @@
 ion-content {
   --background: rgb(14, 2, 48);
 }
-ion-textarea {
+ion-textarea,
+ion-input {
   border: 3px solid #6f00ff;
-  --border-radius: 28px;
+  // TODO: Not working
+  border-radius: 8px;
   --background: #fff;
 }
 
@@ -12,4 +14,23 @@ h1 {
   font-weight: 500;
   margin-top: 40px;
   margin-bottom: 40px;
+}
+
+.videoArea {
+  width: 15vh;
+  height: 15vh;
+  border-radius: 50%;
+  background-color: #e49191;
+  border: 2px solid #6f00ff;
+  cursor: pointer;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+span {
+  color: #fff;
+  font-weight: 500;
+  margin-left: 5px;
 }

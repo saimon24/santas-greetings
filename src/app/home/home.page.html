@@ -15,23 +15,39 @@
         sizeMd="8"
         sizeLg="6"
         sizeXl="4"
-        class="ion-text-center"
+        class="ion-text-center greetingsCol"
       >
         <form [formGroup]="greetingsForm">
           <ion-text color="primary"> <h1>Santas Greetings</h1></ion-text>
+
+          <div class="videoArea" (click)="selectImage()">
+            <ion-icon name="camera-outline" color="light"></ion-icon>
+            <span>Capture message</span>
+          </div>
+
           <ion-textarea
+            class="ion-margin-top"
             placeholder="Your seasonal greetings"
             [rows]="4"
             autoGrow
             formControlName="greetings"
           >
           </ion-textarea>
+
+          <ion-input
+            class="ion-margin-top"
+            placeholder="Your email"
+            formControlName="email"
+          >
+          </ion-input>
           <ion-button
             type="button"
             [disabled]="greetingsForm.invalid"
             class="ion-margin-top"
             (click)="submit()"
-            >Submit greetings</ion-button
+          >
+            <ion-icon name="send-outline" color="light" slot="start"></ion-icon>
+            Submit greetings</ion-button
           >
         </form>
       </ion-col>
