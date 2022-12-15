@@ -1,6 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import Snowflakes from 'magic-snowflakes';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,10 @@ export class HomePage implements AfterViewInit {
   });
   snowflakes!: Snowflakes;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private supabaseService: SupabaseService
+  ) {}
 
   ngAfterViewInit() {
     this.startSnow();
@@ -30,5 +35,18 @@ export class HomePage implements AfterViewInit {
     const { greetings } = this.greetingsForm.getRawValue();
   }
 
-  selectImage() {}
+  async captureVideo() {
+    const video = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      source: CameraSource.Photos,
+      resultType: CameraResultType.Uri,
+    });
+    console.log(
+      '🚀 ~ file: home.page.ts:41 ~ HomePage ~ captureVideo ~ video',
+      video
+    );
+    const result = await this.supabaseService.uploadVideo(video);
+    console.log('IM DONE: ', result);
+  }
 }
