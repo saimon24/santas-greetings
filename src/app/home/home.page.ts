@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { LoadingController, ToastController } from '@ionic/angular';
 import Snowflakes from 'magic-snowflakes';
@@ -22,12 +23,15 @@ export class HomePage implements AfterViewInit {
   snowflakes!: Snowflakes;
   isRecording = false;
   videoBlob?: Blob;
+  localVideo?: SafeUrl;
+
   greetings = this.supabaseService.getGreetings();
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
     private loadingController: LoadingController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngAfterViewInit() {
@@ -83,7 +87,8 @@ export class HomePage implements AfterViewInit {
     this.mediaRecorder.onstop = async (event) => {
       this.videoBlob = new Blob(chunks, { type: 'video/webm' });
       console.log('got video: ', this.videoBlob);
-      // const result = await this.supabaseService.uploadVideo(videoBuffer);
+      const video = URL.createObjectURL(this.videoBlob);
+      this.localVideo = this.sanitizer.bypassSecurityTrustUrl(video);
     };
 
     // Store chunks of recorded video
@@ -104,18 +109,8 @@ export class HomePage implements AfterViewInit {
     this.isRecording = false;
   }
 
-  async capturePhoto() {
-    // const video = await Camera.getPhoto({
-    //   quality: 90,
-    //   allowEditing: true,
-    //   source: CameraSource.Photos,
-    //   resultType: CameraResultType.Uri,
-    // });
-    // console.log(
-    //   '🚀 ~ file: home.page.ts:41 ~ HomePage ~ captureVideo ~ video',
-    //   video
-    // );
-    // const result = await this.supabaseService.uploadVideo(video);
-    // console.log('IM DONE: ', result);
+  resetRecording() {
+    this.localVideo = undefined;
+    this.videoBlob = undefined;
   }
 }

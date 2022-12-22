@@ -34,6 +34,23 @@
             [hidden]="!isRecording"
           ></video>
 
+          <video
+            [src]="localVideo"
+            class="video"
+            controls
+            playsinline
+            [hidden]="!localVideo"
+          ></video>
+
+          <ion-button
+            type="button"
+            class="ion-margin-top"
+            (click)="resetRecording()"
+            *ngIf="localVideo"
+          >
+            Reset recording</ion-button
+          >
+
           <ion-button
             type="button"
             class="ion-margin-top"
