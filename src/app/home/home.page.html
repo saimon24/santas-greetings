@@ -1,11 +1,3 @@
-<!-- <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content [fullscreen]="true">
   <ion-grid [fixed]="true">
     <ion-row class="ion-justify-content-center ion-align-items-center">
@@ -20,10 +12,36 @@
         <form [formGroup]="greetingsForm">
           <ion-text color="primary"> <h1>Santas Greetings</h1></ion-text>
 
-          <div class="videoArea" (click)="captureVideo()">
-            <ion-icon name="camera-outline" color="light"></ion-icon>
+          <div
+            class="videoArea"
+            (click)="captureVideo()"
+            [hidden]="isRecording"
+          >
+            <ion-icon
+              name="camera-outline"
+              color="light"
+              size="large"
+            ></ion-icon>
             <span>Capture message</span>
           </div>
+
+          <video
+            class="video"
+            #video
+            autoplay
+            playsinline
+            muted
+            [hidden]="!isRecording"
+          ></video>
+
+          <ion-button
+            type="button"
+            class="ion-margin-top"
+            (click)="stopRecording()"
+            [hidden]="!isRecording"
+          >
+            Stop Recording</ion-button
+          >
 
           <ion-textarea
             class="ion-margin-top"
@@ -42,7 +60,7 @@
           </ion-input>
           <ion-button
             type="button"
-            [disabled]="greetingsForm.invalid"
+            [disabled]="greetingsForm.invalid || !videoBlob"
             class="ion-margin-top"
             (click)="submit()"
           >
@@ -50,6 +68,30 @@
             Submit greetings</ion-button
           >
         </form>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col
+        sizeXs="12"
+        sizeMd="6"
+        sizeXl="4"
+        *ngFor="let greeting of greetings | async"
+      >
+        <ion-card>
+          <video
+            controls
+            [src]="(greeting.videoFile | async)"
+            type="video/webm"
+            playsinline
+          ></video>
+          <ion-card-content>
+            <ion-text color="light"
+              >{{ greeting.text }}
+              <p>{{ greeting.email}}</p></ion-text
+            >
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
