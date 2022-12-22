@@ -40,14 +40,13 @@ export class SupabaseService {
       .from(TABLE_GREETINGS)
       .select('*')
       .range(offset, offset + 5)
-      .order('createdAt');
+      .order('createdAt', { ascending: false });
 
     let videos = result.data || [];
     videos = videos.map((video) => {
       video.videoFile = this.downloadVideo(video.video);
       return video;
     });
-    console.log('MY files: ', videos);
 
     this.greetings.next(videos);
   }
@@ -57,10 +56,7 @@ export class SupabaseService {
       .from(BUCKET_VIDEOS)
       .download(`${filename}`);
 
-    console.log(data);
-
     const result = URL.createObjectURL(data!);
-    console.log('return data: ', result);
     return this.sanitizer.bypassSecurityTrustUrl(result);
     result;
   }
